@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {BasicService} from "../../../../service/basic.service";
 import {HeaderComponent} from "../../header.component";
+import {PlayerService} from "../../../../service/player.service";
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import {HeaderComponent} from "../../header.component";
 export class LoginComponent {
   constructor(private http: HttpClient,
               public service: BasicService,
-              private headComp: HeaderComponent) {
+              private headComp: HeaderComponent,
+              private playerService: PlayerService) {
   }
 
   username: any = '';
@@ -23,6 +25,7 @@ export class LoginComponent {
       value => {
         if (value.status === 200) {
           localStorage.setItem('token', value.body.token);
+          this.playerService.updateUserBalance()
           this.onClose();
         }
       },

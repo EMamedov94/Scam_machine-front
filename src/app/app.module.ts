@@ -11,6 +11,7 @@ import {RouterModule} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
 import { GameComponent } from './layout/game/game.component';
 import { ProfileComponent } from './layout/header/profile/profile.component';
+import {PlayerService} from "./service/player.service";
 
 @NgModule({
   declarations: [
@@ -29,9 +30,9 @@ import { ProfileComponent } from './layout/header/profile/profile.component';
         HttpClientModule
     ],
   providers: [
-    HeaderComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    PlayerService
   ],
   bootstrap: [AppComponent]
 })

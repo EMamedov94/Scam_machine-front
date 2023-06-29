@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {BasicService} from "../../service/basic.service";
 import {PlayerService} from "../../service/player.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {DataService} from "../../service/data.service";
+import {GameComponent} from "../game/game.component";
 
 @Component({
   selector: 'app-header',
@@ -12,11 +14,17 @@ export class HeaderComponent {
 
   constructor(private service: BasicService,
               private http: HttpClient,
-              private playerService: PlayerService) {
+              public playerService: PlayerService) {
   }
 
   isVisibleAuthBlock: boolean = false;
-  user: any = this.playerService.getCurrentUser().subscribe(value => this.user = value);
+  userBalance: any;
+
+  ngOnInit(): void {
+    if (this.logIn) {
+      this.playerService.updateUserBalance()
+    }
+  }
 
   openAuthMenu() {
     this.isVisibleAuthBlock = !this.isVisibleAuthBlock;
