@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import {BasicService} from "../../../../service/basic.service";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {HeaderComponent} from "../../header.component";
-import {catchError, throwError} from "rxjs";
 
 @Component({
   selector: 'app-registration',
@@ -10,21 +9,31 @@ import {catchError, throwError} from "rxjs";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent {
+  username: any = '';
+  password: any = '';
+  message: any = '';
+  isSuccess: boolean = false;
+
   constructor(private http: HttpClient,
               public service: BasicService,
               private headComp: HeaderComponent) {
   }
 
-  username: any = '';
-  password: any = '';
-
   onRegistration(username: any, password: any) {
     this.http.post<any>(this.service.url + '/registration', {username, password})
-      .subscribe((response) => {
-        if (response.status == 200) {
-          this.onClose();
+      .subscribe({
+        next: () => {
+          this.isSuccess = true;
+          this.message = 'Success!';
+          setTimeout(() => {
+            this.onClose();
+          }, 2000)
+        },
+        error: err => {
+          this.isSuccess = false;
+          this.message = err.error;
         }
-    })
+      })
   }
 
   onClose() {

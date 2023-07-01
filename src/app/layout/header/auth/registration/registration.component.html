@@ -5,8 +5,9 @@
     </g>
   </svg>
   <form class="auth-form" (ngSubmit)="onRegistration(username, password)">
+    <div class="error-message" [ngClass]="{'success': isSuccess, 'error': !isSuccess}" *ngIf="message">{{message}}</div>
     <input class="input-field" [(ngModel)]="username" type="text" name="username" placeholder="username">
     <input class="input-field" [(ngModel)]="password" type="password" name="password" placeholder="password">
-    <button class="btn" type="submit">logIn</button>
+    <button class="btn" type="submit">Registration</button>
   </form>
 </div>

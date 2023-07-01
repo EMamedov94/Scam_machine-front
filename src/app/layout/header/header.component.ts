@@ -1,9 +1,6 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
-import {BasicService} from "../../service/basic.service";
+import {Component} from '@angular/core';
 import {PlayerService} from "../../service/player.service";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {DataService} from "../../service/data.service";
-import {GameComponent} from "../game/game.component";
+import {AuthenticationService} from "../../service/authentication.service";
 
 @Component({
   selector: 'app-header',
@@ -12,8 +9,7 @@ import {GameComponent} from "../game/game.component";
 })
 export class HeaderComponent {
 
-  constructor(private service: BasicService,
-              private http: HttpClient,
+  constructor(public authService: AuthenticationService,
               public playerService: PlayerService) {
   }
 
@@ -21,7 +17,7 @@ export class HeaderComponent {
   userBalance: any;
 
   ngOnInit(): void {
-    if (this.logIn) {
+    if (this.authService.logIn) {
       this.playerService.updateUserBalance()
     }
   }
@@ -32,9 +28,5 @@ export class HeaderComponent {
 
   logOut() {
     localStorage.clear();
-  }
-
-  get logIn(): boolean {
-    return localStorage.getItem('token') != null;
   }
 }

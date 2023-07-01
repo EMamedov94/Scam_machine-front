@@ -1,11 +1,7 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BasicService} from "../../service/basic.service";
-import {ProfileComponent} from "../header/profile/profile.component";
 import {PlayerService} from "../../service/player.service";
-import {HeaderComponent} from "../header/header.component";
-import {DataService} from "../../service/data.service";
-import {Observable, Subject, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-game',
@@ -13,10 +9,11 @@ import {Observable, Subject, switchMap} from "rxjs";
   styleUrls: ['./game.component.css']
 })
 export class GameComponent {
-  defaultSlots: any = '?';
+  defaultSlots: string = '?';
   resultSlots: any[] = [{}, {}, {}];
   isSpinning: boolean = false;
   start: boolean = false;
+  errMessage: string = '';
 
   constructor(private http: HttpClient,
               private service: BasicService,
@@ -24,24 +21,29 @@ export class GameComponent {
   }
 
   spin() {
-    const headers = new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('token')
-    });
+    let headers = new HttpHeaders();
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers = headers.append('Authorization', 'Bearer ' + token);
+    }
+
     this.http.post<any>(
       this.service.url + '/spin',
       {},
       {headers})
       .subscribe({
-      next: ((res: any) => {
-        this.isSpinning = true;
-        this.start = true;
-        // Эмуляция задержки для анимации вращения
-        setTimeout(() => {
-          this.isSpinning = false;
-          this.resultSlots = res;
-          this.playerService.updateUserBalance();
-        }, 2000);
+        next: res => {
+          this.isSpinning = true;
+          this.start = true;
+          this.errMessage = '';
+          // Эмуляция задержки для анимации вращения
+          setTimeout(() => {
+            this.isSpinning = false;
+            this.resultSlots = res;
+            this.playerService.updateUserBalance();
+          }, 2000);
+        },
+        error: err => this.errMessage = err.error
       })
-    });
   }
 }

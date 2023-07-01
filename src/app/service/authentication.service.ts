@@ -8,5 +8,7 @@ export class AuthenticationService {
 
   constructor() { }
 
-
+  get logIn(): boolean {
+    return localStorage.getItem('token') != null;
+  }
 }

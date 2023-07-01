@@ -1,6 +1,7 @@
 <div class="game-block">
   <div class="game">
     <form (ngSubmit)="spin()">
+      <div class="error-message" *ngIf="errMessage">{{errMessage}}</div>
       <div class="columns-container">
         <div class="column">
           <div class="slot" [class.spin-animation]="isSpinning">

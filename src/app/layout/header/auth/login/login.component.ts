@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {BasicService} from "../../../../service/basic.service";
 import {HeaderComponent} from "../../header.component";
 import {PlayerService} from "../../../../service/player.service";
@@ -21,20 +21,17 @@ export class LoginComponent {
   errMessage: any = '';
 
   onLogin(username: any, password: any) {
-    this.http.post<any>(this.service.url + '/login', {username, password}, {observe: 'response'}).subscribe(
-      value => {
-        if (value.status === 200) {
-          localStorage.setItem('token', value.body.token);
+    this.http.post<any>(this.service.url + '/login', {username, password}, {observe: 'response'})
+      .subscribe({
+        next: (res: any) => {
+          localStorage.setItem('token', res.body.token);
           this.playerService.updateUserBalance()
           this.onClose();
+        },
+        error: err => {
+          this.errMessage = err.error;
         }
-      },
-      error => {
-        if (error.status === 401) {
-          this.errMessage = error.error;
-        }
-      }
-    )
+      })
   }
 
   onClose() {
