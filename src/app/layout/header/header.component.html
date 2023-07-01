@@ -1,8 +1,7 @@
 <header>
-  <div class="logo"></div>
   <nav class="nav-block">
     <ul class="nav-menu">
-      <li><a (click)="openAuthMenu()">LogIn</a></li>
+      <li *ngIf="!logIn"><a (click)="openAuthMenu()">LogIn</a></li>
       <li *ngIf="logIn"><a (click)="logOut()">LogOut</a></li>
       <li *ngIf="logIn">Balance: {{playerService.getUserBalance()}}</li>
     </ul>

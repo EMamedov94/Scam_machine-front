@@ -1,10 +1,24 @@
 <div class="game-block">
   <div class="game">
     <form (ngSubmit)="spin()">
-      <div>{{defaultSlots[0].value}}</div>
-      <div>{{defaultSlots[1].value}}</div>
-      <div>{{defaultSlots[2].value}}</div>
-      <button type="submit">spin</button>
+      <div class="columns-container">
+        <div class="column">
+          <div class="slot" [class.spin-animation]="isSpinning">
+            {{ start ? resultSlots[0].value : defaultSlots}}
+          </div>
+        </div>
+        <div class="column">
+          <div class="slot" [class.spin-animation]="isSpinning">
+            {{ start ? resultSlots[1].value : defaultSlots}}
+          </div>
+        </div>
+        <div class="column">
+          <div class="slot" [class.spin-animation]="isSpinning">
+            {{ start ? resultSlots[2].value : defaultSlots}}
+          </div>
+        </div>
+      </div>
+      <button type="submit" [disabled]="isSpinning">spin</button>
     </form>
   </div>
 </div>

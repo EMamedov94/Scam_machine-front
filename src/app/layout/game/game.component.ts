@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BasicService} from "../../service/basic.service";
 import {ProfileComponent} from "../header/profile/profile.component";
@@ -13,7 +13,10 @@ import {Observable, Subject, switchMap} from "rxjs";
   styleUrls: ['./game.component.css']
 })
 export class GameComponent {
-  defaultSlots: any = [{value: 0}, {value: 0}, {value: 0}];
+  defaultSlots: any = '?';
+  resultSlots: any[] = [{}, {}, {}];
+  isSpinning: boolean = false;
+  start: boolean = false;
 
   constructor(private http: HttpClient,
               private service: BasicService,
@@ -30,8 +33,14 @@ export class GameComponent {
       {headers})
       .subscribe({
       next: ((res: any) => {
-        this.defaultSlots = res;
-        this.playerService.updateUserBalance()
+        this.isSpinning = true;
+        this.start = true;
+        // Эмуляция задержки для анимации вращения
+        setTimeout(() => {
+          this.isSpinning = false;
+          this.resultSlots = res;
+          this.playerService.updateUserBalance();
+        }, 2000);
       })
     });
   }
